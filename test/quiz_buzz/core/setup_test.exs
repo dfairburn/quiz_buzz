@@ -28,7 +28,7 @@ defmodule QuizBuzz.Core.SetupTest do
 
     test "adds a new team with the supplied name", %{quiz: quiz} do
       {:ok, quiz} = Setup.add_team(quiz, "My team")
-      assert [%Team{name: "My team"}, %Team{name: "Existing team"}] = quiz.teams
+      assert [%Team{name: "My team", score: 0}, %Team{name: "Existing team", score: 0}] = quiz.teams
     end
 
     test "rejects blank names", %{quiz: quiz} do

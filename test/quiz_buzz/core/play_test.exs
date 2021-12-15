@@ -5,12 +5,14 @@ defmodule QuizBuzz.Core.PlayTest do
 
   alias QuizBuzz.Core.Play
   alias QuizBuzz.Schema.Player
+  alias QuizBuzz.Schema.Team
 
   describe "QuizBuzz.Core.Play.buzz/2" do
     setup do
       jane_doe = Player.new("Jane Doe")
       joe_bloggs = Player.new("Joe Bloggs")
-      quiz = active_quiz() |> with_player(jane_doe) |> with_player(joe_bloggs)
+      team = Team.new("Team one")
+      quiz = active_quiz() |> with_player(jane_doe) |> with_player(joe_bloggs) |> with_team(team)
       {:ok, quiz: quiz}
     end
 
@@ -26,6 +28,11 @@ defmodule QuizBuzz.Core.PlayTest do
     test "updates the quiz state to buzzed", %{quiz: quiz} do
       {:ok, quiz} = Play.buzz(quiz, "Jane Doe")
       assert quiz.state == :buzzed
+    end
+
+    test "updates the team score when answer correct", %{quiz: quiz} do
+      {:ok, quiz} = Play.inc_score(quiz, "Team one")
+      assert Enum.map(quiz.teams, &{&1.name, &1.score}) == [{"Team one", 1}]
     end
 
     test "fails unless the quiz is in the active state", %{quiz: quiz} do

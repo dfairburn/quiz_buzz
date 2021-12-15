@@ -13,6 +13,7 @@ defmodule QuizBuzz.Core do
   defdelegate join_team(quiz, team, player), to: Setup
   defdelegate start(quiz), to: Setup
 
+  defdelegate inc_score(quiz, team_name), to: Play
   defdelegate buzz(quiz, player), to: Play
   defdelegate reset_buzzers(quiz), to: Play
 end

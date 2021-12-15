@@ -60,6 +60,12 @@ defmodule QuizBuzzWeb.QuizmasterLive do
     {:noreply, socket}
   end
 
+  def handle_event("inc-score", %{"team_name" => team_name}, socket) do
+    socket.assigns.quiz.id
+    |> Registry.inc_score(team_name)
+    {:noreply, socket}
+  end
+
   def handle_event(event, params, socket) do
     Logger.warn("Received unexpected event: #{inspect(event)} with params #{inspect(params)}")
     {:noreply, socket}

@@ -28,9 +28,9 @@
       <%= live_component QuizBuzzWeb.SetupComponent, quiz: @quiz %>      
     <% :active -> %>
       <button type="button" class="button" disabled>Reset buzzers</button>
-      <%= live_component QuizBuzzWeb.ScoreboardComponent, quiz: @quiz, player_name: nil %>      
+      <%= live_component QuizBuzzWeb.ScoreboardComponent, quiz: @quiz, player_name: nil, qm: true%>      
     <% :buzzed -> %>
       <button type="button" class="button" phx-click="reset-buzzers">Reset buzzers</button>
-      <%= live_component QuizBuzzWeb.ScoreboardComponent, quiz: @quiz, player_name: nil %>      
+      <%= live_component QuizBuzzWeb.ScoreboardComponent, quiz: @quiz, player_name: nil, qm: true%>      
   <% end %>
 <% end %>

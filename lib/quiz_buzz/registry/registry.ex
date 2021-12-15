@@ -93,6 +93,14 @@ defmodule QuizBuzz.Registry do
     end
   end
 
+  @spec inc_score(String.t(), String.t()) :: :ok | {:error, String.t()}
+  def inc_score(id, team_name) do
+    with quiz <- get_quiz(id),
+         {:ok, quiz} <- Core.inc_score(quiz, team_name) do
+      :ok = update_quiz(id, quiz)
+    end
+  end
+
   @spec reset_buzzers(String.t()) :: :ok | {:error, String.t()}
   def reset_buzzers(id) do
     with quiz <- get_quiz(id),

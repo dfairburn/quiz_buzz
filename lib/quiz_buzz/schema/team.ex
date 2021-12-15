@@ -4,12 +4,12 @@ defmodule QuizBuzz.Schema.Team do
   """
 
   @enforce_keys [:name]
-  defstruct [:name]
+  defstruct [:name, :score]
 
-  @type t :: %__MODULE__{name: String.t()}
+  @type t :: %__MODULE__{name: String.t(), score: Integer.t()}
 
   @spec new(String.t()) :: t()
   def new(name) do
-    %__MODULE__{name: name}
+    %__MODULE__{name: name, score: 0}
   end
 end

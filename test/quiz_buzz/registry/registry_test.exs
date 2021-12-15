@@ -64,10 +64,14 @@ defmodule QuizBuzz.RegistryTest do
     |> assert_buzzer_sounded()
     |> player_tries_to_buzz("Bob")
     |> assert_quiz_not_updated()
+    |> quizmaster_awards_mark("Team one")
+    |> assert_mark_awarded("Team one", 1)
     |> quizmaster_resets_buzzers()
     |> assert_no_player_buzzed()
     |> player_buzzes("Carol")
     |> assert_player_buzzed("Carol")
+    |> quizmaster_awards_mark("Team one")
+    |> assert_mark_awarded("Team one", 2)
   end
 
   defp quizmaster_creates_quiz do
@@ -118,6 +122,12 @@ defmodule QuizBuzz.RegistryTest do
     id
   end
 
+  defp quizmaster_awards_mark(id, team_name) do
+    flush_mailbox()
+    :ok = Registry.inc_score(id, team_name)
+    id
+  end
+
   defp quizmaster_resets_buzzers(id) do
     flush_mailbox()
     :ok = Registry.reset_buzzers(id)
@@ -128,6 +138,12 @@ defmodule QuizBuzz.RegistryTest do
     assert_receive({:quiz, quiz})
     assert quiz.state == :buzzed
     assert [%{name: ^player_name}] = Enum.filter(quiz.players, & &1.buzzed?)
+    id
+  end
+
+  defp assert_mark_awarded(id, team_name, score) do
+    assert_receive({:quiz, quiz})
+    assert Enum.find(quiz.teams, &(&1.name == team_name && &1.score == score))
     id
   end
 

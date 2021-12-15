@@ -153,6 +153,14 @@ defmodule QuizBuzzWeb.QuizLiveTest do
       assert has_element?(view, ".qb-team-player.qb-me", "Bob")
     end
 
+    test "shows each teams score", %{view: view} do
+      assert has_element?(view, ".qb-team", "Score: 0")
+    end
+
+    test "doesn't show increment score button for players", %{view: view} do
+      refute has_element?(view, ".qb-inc-score", "\+")
+    end
+
     test "indicates when a team player buzzes using the buzz button", %{view: view} do
       view |> element("button", "Buzz") |> render_click()
       assert has_element?(view, ".qb-scoreboard.qb-buzzed")

@@ -22,12 +22,22 @@
   text-transform: none;
 }
 
-.qb-scoreboard .qb-team {
+.qb-scoreboard .qb-team .qb-team-score{
   padding: 1rem;
+}
+
+.qb-inc-score {
+	background-color: green;
 }
 
 .qb-scoreboard .qb-team ul {
   margin-bottom: 0.5rem;
+}
+
+.qb-team-header {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	align-items: first baseline;
 }
 
 .qb-scoreboard h2 {

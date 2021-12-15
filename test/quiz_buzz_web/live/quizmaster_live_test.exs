@@ -118,14 +118,26 @@ defmodule QuizBuzzWeb.QuizmasterLiveTest do
   describe "QuizBuzzWeb.QuizmasterLive, in the active phase" do
     setup %{conn: conn} do
       {view, quiz_id} = start_new_quiz(conn)
+      :ok = Registry.add_team(quiz_id, "Team one")
       :ok = Registry.join_quiz(quiz_id, "Alice")
+      :ok = Registry.join_team(quiz_id, "Team one", "Alice")
       view |> element("button", "Start quiz") |> render_click()
       {:ok, view: view, quiz_id: quiz_id}
+    end
+
+    test "displays the increment score button for each team", %{view: view} do
+      assert has_element?(view, ".qb-inc-score")
     end
 
     test "indicates when a player buzzes", %{view: view, quiz_id: quiz_id} do
       :ok = Registry.buzz(quiz_id, "Alice")
       assert has_element?(view, ".qb-team.qb-buzzed", "Alice")
+    end
+
+    test "increments a single teams score", %{view: view} do
+      render(view)
+      view |> element("button", "+") |> render_click()
+      assert has_element?(view, ".qb-team", "Score: 1")
     end
 
     test "allows buzzers to be reset", %{view: view, quiz_id: quiz_id} do
@@ -136,7 +148,6 @@ defmodule QuizBuzzWeb.QuizmasterLiveTest do
       refute has_element?(view, ".qb-buzzed")
     end
   end
-
   defp start_new_quiz(conn) do
     {:error, {:redirect, %{to: url}}} = live(conn, "/quizmaster")
     {:ok, view, _html} = live(conn, url)
